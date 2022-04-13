@@ -1,0 +1,70 @@
+{
+  "complaints": [
+    {
+      "id": 1,
+      "content": "Natsu is the best",
+      "likes": 0,
+      "important": true
+    },
+    {
+      "id": 2,
+      "content": "Naughty burger has good deals,but rude staff",
+      "likes": 0,
+      "important": false
+    },
+    {
+      "id": 3,
+      "content": "that pizza place is so rude in hervanta",
+      "likes": 0,
+      "important": true
+    },
+    {
+      "content": "Hervanta needs some good restaurants",
+      "date": "2022-04-13T10:38:56.786Z",
+      "likes": 0,
+      "important": true,
+      "id": 4
+    },
+    {
+      "content": "lets test another complaint",
+      "date": "2022-04-13T11:27:10.080Z",
+      "important": false,
+      "id": 5
+    },
+    {
+      "content": "Lam is too mild",
+      "date": "2022-04-13T11:53:59.121Z",
+      "important": true,
+      "id": 6
+    }
+  ],
+  "comments": [
+    {
+      "content": "cann't agree more, that restaurant sucks",
+      "likes": 0,
+      "id": 1
+    },
+    {
+      "content": "especially that dude with hat",
+      "likes": 0,
+      "id": 2
+    },
+    {
+      "content": "best burger over there",
+      "likes": 0,
+      "id": 3
+    },
+    {
+      "content": "",
+      "id": 4
+    },
+    {
+      "content": "terrible service from pizza place",
+      "id": 5
+    },
+    {
+      "content": "fucking refresh changes everything",
+      "id": 6
+    }
+  ]
+}
