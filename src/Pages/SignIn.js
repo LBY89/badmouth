@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
 import loginService from '../services/login'
 import { useState } from 'react'
+import complaintService from '../services/complaints'
 
 function Copyright(props) {
   return (
@@ -34,11 +35,11 @@ const theme = createTheme();
 const  SignIn =(props) => {
 // const [email, setEmail] = useState('') 
 // const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)
-  const { errorMessage, setErrorMessage} = props
+  const { setErrorMessage, setUser} = props
 
 
   const navigate = useNavigate()
+
   const handleSubmit = async (event) => {
 
     event.preventDefault();
@@ -55,6 +56,11 @@ const  SignIn =(props) => {
         email, password
       })
       
+      window.localStorage.setItem(
+        'loggedBadmouthUser', JSON.stringify(user)
+      )
+      
+      complaintService.setToken(user.token)
       setUser(user)
       console.log(user);
       navigate('../home')

@@ -6,7 +6,7 @@ import complaintService from '../services/complaints'
 
 const Restaurant =( props )=> {
 
-    const {complaints, setComplaints} = props
+    const {complaints, setComplaints, user } = props
     console.log('complaints in Restaurant', complaints)
     
     const [newComplaint, setNewComplaint] =useState([])
@@ -21,6 +21,12 @@ const Restaurant =( props )=> {
             important: Math.random() > 0.5,
             id: complaints.length +1 
         }
+
+            
+        //const user = JSON.parse(window.localStorage.getItem('loggedBadmouthUser'))
+        complaintService.setToken(user.token)
+            
+
         complaintService
         .create(newComplaintObj)
         .then(returnedComplaint => {
