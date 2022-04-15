@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import commentService from '../services/comments'
 
 const Complaint = (props) => {
     const [newComment, setNewComment] = useState('')
@@ -20,12 +20,12 @@ const Complaint = (props) => {
             setComplaint(complaint)
         }
 
-        axios
-          .get('http://localhost:3001/comments')
-          .then(response => {
-            console.log('promise fulfilled')
-            setComments(response.data)
-          })
+        // commentService
+        //   .getAll()
+        //   .then(allComments => {
+        //     console.log('promise fulfilled')
+        //     setComments(allComments)
+        //   })
         
       }, [])
       const addComment =(e) => {
@@ -35,8 +35,8 @@ const Complaint = (props) => {
             content: newComment,
             id: comments.length +1 
         }
-        axios
-        .post('http://localhost:3001/comments', newCommentObj)
+        commentService
+        .create(newCommentObj)
         .then(response => {
             setComments(comments.concat(newCommentObj))
             setNewComment('')
@@ -75,9 +75,9 @@ const Complaint = (props) => {
                 <button type="submit">save</button>
             </form> 
         </div>
-        {comments.map(comment => 
+        {/* {comments.map(comment => 
             <p key={comment.id}>{comment.content}</p>
-        )}
+        )} */}
         </div>
         
     )

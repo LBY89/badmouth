@@ -13,7 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
-
+import loginService from '../services/login'
+import { useState } from 'react'
 
 function Copyright(props) {
   return (
@@ -30,17 +31,43 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+const  SignIn =(props) => {
+// const [email, setEmail] = useState('') 
+// const [password, setPassword] = useState('') 
+  const [user, setUser] = useState(null)
+  const { errorMessage, setErrorMessage} = props
+
+
   const navigate = useNavigate()
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    navigate('../home')
-  };
+    // const userInput = {
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // }
+    const email = data.get('email')
+    const password = data.get('password')
+    
+    try {
+      const user = await loginService.login({
+        email, password
+      })
+      
+      setUser(user)
+      console.log(user);
+      navigate('../home')
+      // setEmail('')
+      // setPassword('')
+    } catch (exception) {
+      setErrorMessage('email or password is not correct')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  
+};
 
   return (
     <ThemeProvider theme={theme}>
@@ -112,3 +139,5 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+export default SignIn

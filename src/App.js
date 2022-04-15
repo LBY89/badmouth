@@ -7,30 +7,32 @@ import Restaurant from './Pages/Restaurant'
 import Shop from './Pages/Shop'
 import Complaint from './Components/Complaint'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import complaintService from './services/complaints'
 
 const App = () => {
 
   const [complaints, setComplaints] = useState([])
   const [complaint, setComplaint] = useState(null)
-  console.log('refresh presses child')
+  const [errorMessage, setErrorMessage] = useState(null)
+  console.log('complaints in App', complaints)
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/complaints')
-      .then(response => {
+    complaintService
+      .getAll()
+      .then(initialComplaints => {
         console.log('promise fulfilled')
-        setComplaints(response.data)
+        setComplaints(initialComplaints)
       })
   }, [])
   return (
     <div>
+      {errorMessage}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
+        <Route path="/signup" element={<SignUp errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
         <Route path="/restaurants" element={<Restaurant complaints = {complaints} setComplaints={ setComplaints} />} />
         <Route path="/shops" element={<Shop />} />
         <Route path="/restaurants/:id" element={<Complaint complaint={complaint} setComplaint={setComplaint}/>} />

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -13,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom'
+import signupService from '../services/signup'
+
 
 function Copyright(props) {
   return (
@@ -29,16 +30,46 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp() {
+const SignUp = (props) => {
+
     const navigate = useNavigate()
-  const handleSubmit = (event) => {
+    const { errorMessage, setErrorMessage} = props
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    navigate('../home')
+
+    const firstname = data.get('firstname')
+    const lastname = data.get('lastname')
+    const email = data.get('email')
+    const password = data.get('password')
+    
+    
+    
+    try {
+
+      const user = await signupService.signup({
+        firstname, lastname, email, password
+      })
+      console.log('user', user);
+      
+      setErrorMessage('You have successfully signed up, now please login')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+
+
+      navigate('../signin')
+      // setEmail('')
+      // setPassword('')
+    } catch (exception) {
+      setErrorMessage('email must be unique')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+    
+
   };
 
   return (
@@ -54,17 +85,17 @@ export default function SignUp() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign Up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="firstname"
                   required
                   fullWidth
-                  id="firstName"
+                  id="firstname"
                   label="First Name"
                   autoFocus
                 />
@@ -73,9 +104,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
+                  id="lastname"
                   label="Last Name"
-                  name="lastName"
+                  name="lastname"
                   autoComplete="family-name"
                 />
               </Grid>
@@ -129,3 +160,5 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+export default SignUp

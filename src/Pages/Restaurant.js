@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import complaintService from '../services/complaints'
 
 const Restaurant =( props )=> {
 
     const {complaints, setComplaints} = props
-
+    console.log('complaints in Restaurant', complaints)
+    
     const [newComplaint, setNewComplaint] =useState([])
 
     
@@ -19,10 +21,10 @@ const Restaurant =( props )=> {
             important: Math.random() > 0.5,
             id: complaints.length +1 
         }
-        axios
-        .post('http://localhost:3001/complaints', newComplaintObj)
-        .then(response => {
-            setComplaints(complaints.concat(newComplaintObj))
+        complaintService
+        .create(newComplaintObj)
+        .then(returnedComplaint => {
+            setComplaints(complaints.concat(returnedComplaint))
             setNewComplaint('')
         })
         
