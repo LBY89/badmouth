@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom'
 
 import Button from '@mui/material/Button';
+import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
 
 const Shop =()=> {
     return(
         <div>
-            <div>
+            <Box bgcolor={"background.default"} color={"text.primary"}>
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                    spacing={2}
+                    >
                 <Button component={Link} to="/restaurants">
                     restaurant
                 </Button>
@@ -18,7 +25,8 @@ const Shop =()=> {
                 <Button component={Link} to="/shops">
                     xxx
                 </Button>
-            </div> 
+                </Stack>
+            </Box>
             Shop
         </div>
     )

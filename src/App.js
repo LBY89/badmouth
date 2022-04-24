@@ -1,15 +1,23 @@
 import Landing from './Landing'
 import Home from './Pages/Home'
-import { Routes,Route } from 'react-router-dom'
+import { Routes,Route, useMatch } from 'react-router-dom'
 import SignIn from './Pages/SignIn'
 import SignUp from './Pages/SignUp'
-import Restaurant from './Pages/Restaurant'
-import Shop from './Pages/Shop'
 import Complaint from './Components/Complaint'
 import { useState, useEffect } from 'react'
 import complaintService from './services/complaints'
 import { useNavigate } from 'react-router-dom'
+import {
+  AppBar,
+  styled,
+  Toolbar,
+  Typography
+} from "@mui/material";
 
+const StyledToolbar = styled(Toolbar)({
+  display: "flex",
+  justifyContent: "space-between",
+});
 
 const App = () => {
 
@@ -48,32 +56,40 @@ const App = () => {
     navigate('./')
   }
 
+  const match = useMatch('/:id')
+  console.log('complaint after match', complaints);
+  console.log('match', match);
+  
+
+  const complaintLocated = match
+    ? complaints.find(complaint => complaint.id === match.params.id)
+    : null
+    console.log('complaintLocated', complaintLocated);
+
   return (
     <div>
       {errorMessage}
       {user === null ? 
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home user={user}        
+        handleLogout={handleLogout} 
+        complaints={complaints}/>} />
+         <Route path="/:id" element={<Complaint user={user}complaint={complaintLocated} setComplaint={setComplaint}/>} />
         <Route path="/signin" element={<SignIn user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
-        <Route path="/signup" element={<SignUp errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
-        <Route path="/restaurants" element={<Restaurant complaints = {complaints} setComplaints={ setComplaints} />} />
-        <Route path="/shops" element={<Shop />} />
-        <Route path="/restaurants/:id" element={<Complaint complaint={complaint} setComplaint={setComplaint}/>} />
+        <Route path="/signup" element={<SignUp user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
       </Routes> 
       : 
-      <div>
-        <p>{user.firstname} logged in <button onClick={handleLogout}>loggout</button></p>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/signin" element={<Home />} />
-          <Route path="/signup" element={<Home />} />
-          <Route path="/restaurants" element={<Restaurant complaints = {complaints} setComplaints={ setComplaints} user={user}/>} />
-          <Route path="/shops" element={<Shop />} />
-          <Route path="/restaurants/:id" element={<Complaint complaint={complaint} setComplaint={setComplaint}/>} />
+      <Routes>
+        <Route path="/home" element={<Home user={user} 
+        handleLogout={handleLogout} 
+        complaints={complaints}/>} />
+        <Route path="/:id" element={<Complaint 
+        handleLogout={handleLogout} 
+        user={user }
+        complaint={complaintLocated} 
+        setComplaint={setComplaint}/>} />
       </Routes>
-      </div>
       }
       
     </div>
