@@ -34,10 +34,10 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBadmouthUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      console.log("JSON.parse user", user);
-
-      setUser(user);
+      const user = JSON.parse(loggedUserJSON)
+      console.log('JSON.parse user', user)
+      complaintService.setToken(user.token)
+      setUser(user)
     }
   }, []);
 
@@ -60,78 +60,31 @@ const App = () => {
   return (
     <div>
       {errorMessage}
-      {user === null ? (
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route
-            path="/home"
-            element={
-              <Home
-                user={user}
-                handleLogout={handleLogout}
-                complaints={complaints}
-              />
-            }
-          />
-          <Route
-            path="/complaints/:id"
-            element={
-              <Complaint
-                user={user}
-                complaint={complaintLocated}
-                setComplaint={setComplaint}
-              />
-            }
-          />
-          <Route
-            path="/signin"
-            element={
-              <SignIn
-                user={user}
-                setUser={setUser}
-                errorMessage={errorMessage}
-                setErrorMessage={setErrorMessage}
-              />
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <SignUp
-                user={user}
-                setUser={setUser}
-                errorMessage={errorMessage}
-                setErrorMessage={setErrorMessage}
-              />
-            }
-          />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route
-            path="/home"
-            element={
-              <Home
-                user={user}
-                handleLogout={handleLogout}
-                complaints={complaints}
-              />
-            }
-          />
-          <Route
-            path="/:id"
-            element={
-              <Complaint
-                handleLogout={handleLogout}
-                user={user}
-                complaint={complaintLocated}
-                setComplaints={setComplaints}
-                setComplaint={setComplaint}
-              />
-            }
-          />
-        </Routes>
-      )}
+
+      {user === null ? 
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Home user={user}        
+        handleLogout={handleLogout} 
+        complaints={complaints}/>} />
+         <Route path="/complaints/:id" element={<Complaint user={user}complaint={complaintLocated} setComplaint={setComplaint}/>} />
+        <Route path="/signin" element={<SignIn user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
+        <Route path="/signup" element={<SignUp user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
+      </Routes> 
+      : 
+      <Routes>
+        <Route path="/" element={<Home user={user} 
+        handleLogout={handleLogout} 
+        />} />
+        <Route path="/complaints/:id" element={<Complaint 
+        handleLogout={handleLogout} 
+        user={user }
+        complaint={complaintLocated} 
+        setComplaints={setComplaints}
+        setComplaint={setComplaint}/>} />
+      </Routes>
+      }
+      
     </div>
   );
 };
