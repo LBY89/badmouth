@@ -53,21 +53,7 @@ function Item(props) {
   };
 const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints}) => {
     const [newComment, setNewComment] = useState('')
-    const [comments, setComments] = useState(complaint.comments)
-
-    // const complaint = props.complaint
-    
-    //!!!refresh losing complaint object, very common difficulty
-
-    // useEffect(() => {
-    //   console.log('effect')
-    //   complaintService
-    //     .getAll()
-    //     .then(initialComplaints => {
-    //       console.log('promise fulfilled')
-    //       setComplaints(initialComplaints)
-    //     })
-    // }, [])
+    const [comments, setComments] = useState([])
 
     useEffect(() => {
         console.log('effect')
@@ -75,10 +61,11 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
         if (complaintJSON) {
             const complaint = JSON.parse(complaintJSON)
             setComplaint(complaint)
+            
             commentService
             .getAll(complaint.id)
             .then(allComments => {
-                console.log('promise fulfilled')
+              setComments(allComments)
                 
             })
         }
