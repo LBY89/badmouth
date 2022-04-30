@@ -13,6 +13,12 @@ import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
+const ButtonStyles = {
+  bgColor:{
+      backgroudColor: '#f9a825'
+  }
+}
+
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     justifyContent: "space-between",
@@ -60,7 +66,17 @@ const Home = ({user, handleLogout, complaints, setComplaints}) => {
             { user === null ?
                 <StyledToolbar>
                 search box 
-                sign in and up
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signin'}
+                >
+                sign in</Button>
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signup'}
+                >sign up</Button>
                 </StyledToolbar>
 
                 :

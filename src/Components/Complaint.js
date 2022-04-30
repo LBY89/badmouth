@@ -19,7 +19,11 @@ const StyledToolbar = styled(Toolbar)({
     display: "flex",
     justifyContent: "space-between",
 });
-
+const ButtonStyles = {
+  bgColor:{
+      backgroudColor: '#f9a825'
+  }
+}
 function Item(props) {
     const { sx, ...other } = props;
     return (
@@ -54,7 +58,8 @@ function Item(props) {
 const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints}) => {
     const [newComment, setNewComment] = useState('')
     const [comments, setComments] = useState([])
-
+    console.log('comments from complaint', comments);
+    
     useEffect(() => {
         console.log('effect')
         const complaintJSON = localStorage.getItem('complaintStored')
@@ -93,13 +98,26 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
     if(!complaint) {
         return null
     }
+
+    const filteredComments = comments.filter(comment => comment.complaintId === complaint.id)
+
     return(
         <>
         <AppBar position="sticky">
             { user === null ?
                 <StyledToolbar>
                 search box 
-                sign in and up
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signin'}
+                >
+                sign in</Button>
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signup'}
+                >sign up</Button>
                 </StyledToolbar>
 
                 :
@@ -126,7 +144,7 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
             >
             <Item flex={4}>
             <h2>{complaint ?  complaint.content : ''}</h2>
-            {comments.map(comment => 
+            {filteredComments.map(comment => 
                 <p key={comment.id}>{comment.content}</p>
             )}
             <form onSubmit={addComment}>
