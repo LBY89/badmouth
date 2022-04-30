@@ -1,4 +1,5 @@
 
+
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
@@ -13,6 +14,8 @@ import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import complaintService from '../services/complaints'
+
+
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
   padding: "0 10px",
@@ -21,47 +24,40 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 const ButtonStyles = {
-  bgColor:{
-      backgroudColor: '#f9a825'
-  }
-}
+  bgColor: {
+    backgroudColor: "#f9a825",
+  },
+};
 
 const StyledToolbar = styled(Toolbar)({
-    display: "flex",
-    justifyContent: "space-between",
+  display: "flex",
+  justifyContent: "space-between",
 });
 
 function Item(props) {
-    const { sx, ...other } = props;
-    return (
-      <Box
-        sx={{
-          p: 1,
-          m: 1,
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
-          color: (theme) => (theme.palette.mode === 'dark' ? 'grey.300' : 'grey.800'),
-          border: '1px solid',
-          borderColor: (theme) =>
-            theme.palette.mode === 'dark' ? 'grey.800' : 'grey.300',
-          borderRadius: 2,
-          fontSize: '0.875rem',
-          fontWeight: '700',
-          ...sx,
-        }}
-        {...other}
-      />
-    );
-  }
-  
-  Item.propTypes = {
-    sx: PropTypes.oneOfType([
-      PropTypes.arrayOf(
-        PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool]),
-      ),
-      PropTypes.func,
-      PropTypes.object,
-    ]),
-  };
+  const { sx, ...other } = props;
+  return (
+    <Box
+      sx={{
+        p: 1,
+        m: 1,
+        bgcolor: (theme) =>
+          theme.palette.mode === "dark" ? "#101010" : "grey.100",
+        color: (theme) =>
+          theme.palette.mode === "dark" ? "grey.300" : "grey.800",
+        border: "1px solid",
+        borderColor: (theme) =>
+          theme.palette.mode === "dark" ? "grey.800" : "grey.300",
+        borderRadius: 2,
+        fontSize: "0.875rem",
+        fontWeight: "700",
+        ...sx,
+      }}
+      {...other}
+    />
+  );
+}
+
 
 const Home = ({user, handleLogout }) => {
 
@@ -76,6 +72,7 @@ const Home = ({user, handleLogout }) => {
         setComplaints(allComplaints)   
       })
   }, [])
+
 
   const handleSearchBarInput = (e) => {
     setFilter(e.target.value);
@@ -126,11 +123,20 @@ const Home = ({user, handleLogout }) => {
 
               :
 
-              <StyledToolbar>
-              search box 
-              sign in and up
-              {user.firstname} logged in <button onClick={handleLogout}>loggout</button>
-              
+               <StyledToolbar>
+                <Search onChange={handleSearchBarInput}>
+                  <InputBase placeholder="search..." />
+                </Search>
+                {user.firstname} logged in{" "}
+                <Button
+                  onClick={handleLogout}
+                  style={ButtonStyles.bgcolor}
+                  variant="fab"
+                  component={Link}
+                  to={"/home"}
+                >
+                  log out
+                </Button>
               </StyledToolbar>
           }
           </AppBar>
@@ -190,7 +196,5 @@ const Home = ({user, handleLogout }) => {
           </Box>
       </>
   )
-
-
-}
-export default Home
+};
+export default Home;
