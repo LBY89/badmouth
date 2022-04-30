@@ -1,17 +1,30 @@
 
 import { Link } from 'react-router-dom'
-
+import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
 import {
     AppBar,
     styled,
     Toolbar,
-    Typography
+    InputBase
   } from "@mui/material";
 import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import complaintService from '../services/complaints'
+const Search = styled("div")(({ theme }) => ({
+  backgroundColor: "white",
+  padding: "0 10px",
+  borderRadius: theme.shape.borderRadius,
+  width: "40%",
+}));
+
+const ButtonStyles = {
+  bgColor:{
+      backgroudColor: '#f9a825'
+  }
+}
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -50,17 +63,39 @@ function Item(props) {
     ]),
   };
 
-const Home = ({user, handleLogout, complaints, setComplaints}) => {
-    console.log('complaints', complaints);
+const Home = ({user, handleLogout, complaints, setComplaints }) => {
+    //console.log('complaints', complaints);
+    console.log("complaints", complaints);
+  const [filter, setFilter] = useState("");
+ 
+  const handleSearchBarInput = (e) => {
+    setFilter(e.target.value);
+  };
     
-    
+  const filteredComplaints = !filter
+  ? complaints
+  : complaints.filter((complaint) =>
+      complaint.content.toLowerCase().includes(filter.toLowerCase())
+    );
     return(
         <>
             <AppBar position="sticky">
             { user === null ?
                 <StyledToolbar>
-                search box 
-                sign in and up
+                <Search onChange={handleSearchBarInput}>
+                  <InputBase placeholder="search..."/>
+                </Search>
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signin'}
+                >
+                sign in</Button>
+                <Button
+                style={ButtonStyles.bgColor}
+                variant="fab"
+                component={Link} to={'/signup'}
+                >sign up</Button>
                 </StyledToolbar>
 
                 :
@@ -87,7 +122,7 @@ const Home = ({user, handleLogout, complaints, setComplaints}) => {
                 >
 
                 <Item flex={4}>
-                {complaints.map(complaint => 
+                {filteredComplaints.map(complaint => 
                     <p key={complaint.id}>
                         <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
                             localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
