@@ -56,7 +56,7 @@ const App = () => {
     navigate('./')
   }
 
-  const match = useMatch('/:id')
+  const match = useMatch("/complaints/:id")
   console.log('complaint after match', complaints);
   console.log('match', match);
   
@@ -75,7 +75,7 @@ const App = () => {
         <Route path="/home" element={<Home user={user}        
         handleLogout={handleLogout} 
         complaints={complaints}/>} />
-         <Route path="/:id" element={<Complaint user={user}complaint={complaintLocated} setComplaint={setComplaint}/>} />
+         <Route path="/complaints/:id" element={<Complaint user={user}complaint={complaintLocated} setComplaint={setComplaint}/>} />
         <Route path="/signin" element={<SignIn user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
         <Route path="/signup" element={<SignUp user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
       </Routes> 
@@ -88,6 +88,7 @@ const App = () => {
         handleLogout={handleLogout} 
         user={user }
         complaint={complaintLocated} 
+        setComplaints={setComplaints}
         setComplaint={setComplaint}/>} />
       </Routes>
       }

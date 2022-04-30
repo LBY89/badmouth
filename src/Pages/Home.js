@@ -89,7 +89,7 @@ const Home = ({user, handleLogout, complaints, setComplaints}) => {
                 <Item flex={4}>
                 {complaints.map(complaint => 
                     <p key={complaint.id}>
-                        <Button component={Link} to={`/${complaint.id}`} onClick={() => 
+                        <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
                             localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
                             {complaint.content}
                         </Button>

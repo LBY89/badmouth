@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import complaintService from '../services/complaints'
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -50,13 +51,24 @@ function Item(props) {
       PropTypes.object,
     ]),
   };
-const Complaint = ({user, complaint, setComplaint, handleLogout}) => {
+const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints}) => {
     const [newComment, setNewComment] = useState('')
-    const [comments, setComments] = useState([])
+    const [comments, setComments] = useState(complaint.comments)
 
     // const complaint = props.complaint
     
     //!!!refresh losing complaint object, very common difficulty
+
+    // useEffect(() => {
+    //   console.log('effect')
+    //   complaintService
+    //     .getAll()
+    //     .then(initialComplaints => {
+    //       console.log('promise fulfilled')
+    //       setComplaints(initialComplaints)
+    //     })
+    // }, [])
+
     useEffect(() => {
         console.log('effect')
         const complaintJSON = localStorage.getItem('complaintStored')
@@ -67,7 +79,7 @@ const Complaint = ({user, complaint, setComplaint, handleLogout}) => {
             .getAll(complaint.id)
             .then(allComments => {
                 console.log('promise fulfilled')
-                setComments(allComments)
+                
             })
         }
       }, [])
@@ -79,11 +91,13 @@ const Complaint = ({user, complaint, setComplaint, handleLogout}) => {
             complaintId: complaint.id 
         }
         commentService
-        .create(newCommentObj)
-        .then(response => {
-            setComments(comments.concat(newCommentObj))
-            setNewComment('')
+        .create(complaint.id, newCommentObj)
+        .then(returnedComment =>{
+          setComments(comments.concat(returnedComment))
+          
         })
+        setNewComment('')
+        
       }
       const handleCommentChange =(e)=> {
         setNewComment(e.target.value)
