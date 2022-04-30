@@ -44,7 +44,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       console.log('JSON.parse user', user)
-
+      complaintService.setToken(user.token)
       setUser(user)
     }
   }, [])
@@ -81,10 +81,10 @@ const App = () => {
       </Routes> 
       : 
       <Routes>
-        <Route path="/home" element={<Home user={user} 
+        <Route path="/" element={<Home user={user} 
         handleLogout={handleLogout} 
-        complaints={complaints}/>} />
-        <Route path="/:id" element={<Complaint 
+        />} />
+        <Route path="/complaints/:id" element={<Complaint 
         handleLogout={handleLogout} 
         user={user }
         complaint={complaintLocated} 

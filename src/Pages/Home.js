@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
+import { Box, TextField, Stack, Paper } from "@mui/material";
 import {
     AppBar,
     styled,
@@ -63,11 +63,20 @@ function Item(props) {
     ]),
   };
 
-const Home = ({user, handleLogout, complaints, setComplaints }) => {
-    //console.log('complaints', complaints);
-    console.log("complaints", complaints);
+const Home = ({user, handleLogout }) => {
+
   const [filter, setFilter] = useState("");
- 
+  const [complaintContent,setComplaintContent] = useState("")
+  const [complaints, setComplaints ] = useState([])
+
+  useEffect(() => {
+    complaintService
+      .getAll()
+      .then(allComplaints => {
+        setComplaints(allComplaints)   
+      })
+  }, [])
+
   const handleSearchBarInput = (e) => {
     setFilter(e.target.value);
   };
@@ -77,83 +86,110 @@ const Home = ({user, handleLogout, complaints, setComplaints }) => {
   : complaints.filter((complaint) =>
       complaint.content.toLowerCase().includes(filter.toLowerCase())
     );
-    return(
-        <>
-            <AppBar position="sticky">
-            { user === null ?
-                <StyledToolbar>
-                <Search onChange={handleSearchBarInput}>
-                  <InputBase placeholder="search..."/>
-                </Search>
-                <Button
-                style={ButtonStyles.bgColor}
-                variant="fab"
-                component={Link} to={'/signin'}
-                >
-                sign in</Button>
-                <Button
-                style={ButtonStyles.bgColor}
-                variant="fab"
-                component={Link} to={'/signup'}
-                >sign up</Button>
-                </StyledToolbar>
 
-                :
+  const submitComplaint =(e)=> {
+    e.preventDefault()
+    const newComplaintObj = {
+      content: complaintContent
+    }
+    complaintService
+    .create(newComplaintObj)
+    .then(returnedComplaint => {
+      setComplaints(complaints.concat(returnedComplaint))
+    })
+    setComplaintContent("")
+  }
 
-                <StyledToolbar>
-                search box 
-                sign in and up
-                {user.firstname} logged in <button onClick={handleLogout}>loggout</button>
-                
-                </StyledToolbar>
-            }
-            </AppBar>
-            
-            <Box
-                sx={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                flexDirection: 'row',
-                p: 1,
-                m: 1,
-                bgcolor: 'background.paper',
-                borderRadius: 1,
-                }}
-                >
+  const handleComplaintContent = (e) => {
+    setComplaintContent(e.target.value)
+  }
+  return(
+      <>
+          <AppBar position="sticky">
+          { user === null ?
+              <StyledToolbar>
+              <Search onChange={handleSearchBarInput}>
+                <InputBase placeholder="search..."/>
+              </Search>
+              <Button
+              style={ButtonStyles.bgColor}
+              variant="fab"
+              component={Link} to={'/signin'}
+              >
+              sign in</Button>
+              <Button
+              style={ButtonStyles.bgColor}
+              variant="fab"
+              component={Link} to={'/signup'}
+              >sign up</Button>
+              </StyledToolbar>
 
-                <Item flex={4}>
-                {filteredComplaints.map(complaint => 
-                    <p key={complaint.id}>
-                        <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
-                            localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
-                            {complaint.content}
-                        </Button>
-                    </p>)}
-                </Item>
-                <Item flex={1}> 
-                <Stack
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={1}
-                    >
-                <Button 
-                    startIcon={<LocalDiningIcon/>} 
-                    color="secondary"
-                    >
-                    restaurant
-                </Button>
-                <Button 
-                    startIcon={<ShoppingBasketIcon/>}
-                    color='otherColor'
-                    >
-                    shops
-                </Button>
-                </Stack>
-                </Item>
-            </Box>
-        </>
-    )
+              :
+
+              <StyledToolbar>
+              search box 
+              sign in and up
+              {user.firstname} logged in <button onClick={handleLogout}>loggout</button>
+              
+              </StyledToolbar>
+          }
+          </AppBar>
+          
+          <Box
+              sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexDirection: 'row',
+              p: 1,
+              m: 1,
+              bgcolor: 'background.paper',
+              borderRadius: 1,
+              }}
+              >
+              <Item flex={4}>
+              {filteredComplaints.map(complaint => 
+                  <p key={complaint.id}>
+                      <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
+                          localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
+                          {complaint.content}
+                      </Button>
+                  </p>)}
+              </Item>
+              <Item>
+              <Stack>
+              <TextField
+                onChange={handleComplaintContent}
+                value={complaintContent}
+                label={"complain..."} //optional
+              />
+              <Button onClick={submitComplaint}>Submit</Button>
+              <Button >Reset</Button>
+              </Stack>
+              </Item>
+              <Item flex={1}> 
+              <Stack
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                  spacing={1}
+                  >
+              <Button 
+                  startIcon={<LocalDiningIcon/>} 
+                  color="secondary"
+                  >
+                  restaurant
+              </Button>
+              <Button 
+                  startIcon={<ShoppingBasketIcon/>}
+                  color='otherColor'
+                  >
+                  shops
+              </Button>
+              </Stack>
+              </Item>
+          </Box>
+      </>
+  )
 
 
 }

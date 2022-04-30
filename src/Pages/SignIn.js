@@ -63,9 +63,8 @@ const  SignIn =(props) => {
       complaintService.setToken(user.token)
       setUser(user)
       console.log(user);
-      navigate('../home')
-      // setEmail('')
-      // setPassword('')
+      navigate('../')
+      
     } catch (exception) {
       setErrorMessage('email or password is not correct')
       setTimeout(() => {
