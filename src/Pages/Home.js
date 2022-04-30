@@ -1,17 +1,24 @@
 
 import { Link } from 'react-router-dom'
-
+import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
 import {
     AppBar,
     styled,
     Toolbar,
-    Typography
+    InputBase
   } from "@mui/material";
 import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import complaintService from '../services/complaints'
+const Search = styled("div")(({ theme }) => ({
+  backgroundColor: "white",
+  padding: "0 10px",
+  borderRadius: theme.shape.borderRadius,
+  width: "40%",
+}));
 
 const ButtonStyles = {
   bgColor:{
@@ -56,16 +63,36 @@ function Item(props) {
     ]),
   };
 
-const Home = ({user, handleLogout, complaints, setComplaints}) => {
-    console.log('complaints', complaints);
+const Home = ({user, handleLogout, complaints, setComplaints }) => {
+    //console.log('complaints', complaints);
+    const [homeComplaints, setHomeComplaints] = useState([])
+    console.log('homeComplaints', homeComplaints);
     
+    useEffect(() => {
+      complaintService
+      .getAll()
+      .then(initialComplaints => {
+        console.log('promise fulfilled')
+        setHomeComplaints(initialComplaints)
+      })
+      
+    }, [])
     
+    const filterComplaints = (e) => {
+      //console.log('e for search input', e.target.value);
+      const filter = e.target.value
+      const newComplaints = homeComplaints.filter(complaint => complaint.content.includes(filter))
+      setHomeComplaints(newComplaints)
+      
+    }
     return(
         <>
             <AppBar position="sticky">
             { user === null ?
                 <StyledToolbar>
-                search box 
+                <Search onChange={filterComplaints}>
+                  <InputBase placeholder="search..."/>
+                </Search>
                 <Button
                 style={ButtonStyles.bgColor}
                 variant="fab"
