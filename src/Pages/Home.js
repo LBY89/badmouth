@@ -65,32 +65,24 @@ function Item(props) {
 
 const Home = ({user, handleLogout, complaints, setComplaints }) => {
     //console.log('complaints', complaints);
-    const [homeComplaints, setHomeComplaints] = useState([])
-    console.log('homeComplaints', homeComplaints);
+    console.log("complaints", complaints);
+  const [filter, setFilter] = useState("");
+ 
+  const handleSearchBarInput = (e) => {
+    setFilter(e.target.value);
+  };
     
-    useEffect(() => {
-      complaintService
-      .getAll()
-      .then(initialComplaints => {
-        console.log('promise fulfilled')
-        setHomeComplaints(initialComplaints)
-      })
-      
-    }, [])
-    
-    const filterComplaints = (e) => {
-      //console.log('e for search input', e.target.value);
-      const filter = e.target.value
-      const newComplaints = homeComplaints.filter(complaint => complaint.content.includes(filter))
-      setHomeComplaints(newComplaints)
-      
-    }
+  const filteredComplaints = !filter
+  ? complaints
+  : complaints.filter((complaint) =>
+      complaint.content.toLowerCase().includes(filter.toLowerCase())
+    );
     return(
         <>
             <AppBar position="sticky">
             { user === null ?
                 <StyledToolbar>
-                <Search onChange={filterComplaints}>
+                <Search onChange={handleSearchBarInput}>
                   <InputBase placeholder="search..."/>
                 </Search>
                 <Button
@@ -130,7 +122,7 @@ const Home = ({user, handleLogout, complaints, setComplaints }) => {
                 >
 
                 <Item flex={4}>
-                {complaints.map(complaint => 
+                {filteredComplaints.map(complaint => 
                     <p key={complaint.id}>
                         <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
                             localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
