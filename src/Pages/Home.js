@@ -3,7 +3,7 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
-import { Box, TextField, Stack, Paper } from "@mui/material";
+import { Box, TextField, Stack, Grid, Paper } from "@mui/material";
 import {
     AppBar,
     styled,
@@ -14,7 +14,8 @@ import PropTypes from 'prop-types';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import complaintService from '../services/complaints'
-
+//import {  Radio, RadioGroup, FormControlLabel, FormLabel, FormControl } from '@mui/material'
+import ComplaintCard from '../Components/ComplaintCard'
 
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
@@ -23,16 +24,21 @@ const Search = styled("div")(({ theme }) => ({
   width: "40%",
 }));
 
+
 const ButtonStyles = {
   bgColor: {
     backgroudColor: "#f9a825",
   },
 };
 
+
+
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
+
+
 
 function Item(props) {
   const { sx, ...other } = props;
@@ -58,48 +64,24 @@ function Item(props) {
   );
 }
 
-
-const Home = ({user, handleLogout }) => {
-
+const Home = ({user, handleLogout, complaints, setComplaints }) => {
+  // to solve newly added complaint not clickable, receive setComplaints from 
+  // App parent 
+  
   const [filter, setFilter] = useState("");
-  const [complaintContent,setComplaintContent] = useState("")
-  const [complaints, setComplaints ] = useState([])
-
-  useEffect(() => {
-    complaintService
-      .getAll()
-      .then(allComplaints => {
-        setComplaints(allComplaints)   
-      })
-  }, [])
-
+  
 
   const handleSearchBarInput = (e) => {
     setFilter(e.target.value);
   };
     
+  const matchFilter = complaints.filter((complaint) => complaint.content.toLowerCase().includes(filter.toLowerCase()) || 
+  complaint.title.toLowerCase().includes(filter.toLowerCase()))
+  
   const filteredComplaints = !filter
   ? complaints
-  : complaints.filter((complaint) =>
-      complaint.content.toLowerCase().includes(filter.toLowerCase())
-    );
-
-  const submitComplaint =(e)=> {
-    e.preventDefault()
-    const newComplaintObj = {
-      content: complaintContent
-    }
-    complaintService
-    .create(newComplaintObj)
-    .then(returnedComplaint => {
-      setComplaints(complaints.concat(returnedComplaint))
-    })
-    setComplaintContent("")
-  }
-
-  const handleComplaintContent = (e) => {
-    setComplaintContent(e.target.value)
-  }
+  : matchFilter
+  
   return(
       <>
           <AppBar position="sticky">
@@ -152,24 +134,18 @@ const Home = ({user, handleLogout }) => {
               borderRadius: 1,
               }}
               >
-              <Item flex={4}>
+              <Grid container spacing={3}>
               {filteredComplaints.map(complaint => 
-                  <p key={complaint.id}>
-                      <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
+                  <Grid item key={complaint.id}>
+                    <ComplaintCard complaint={complaint}/>
+                      {/* <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
                           localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
                           {complaint.content}
-                      </Button>
-                  </p>)}
-              </Item>
+                      </Button> */}
+                  </Grid>)}
+              </Grid>
               <Item>
               <Stack>
-              <TextField
-                onChange={handleComplaintContent}
-                value={complaintContent}
-                label={"complain..."} //optional
-              />
-              <Button onClick={submitComplaint}>Submit</Button>
-              <Button >Reset</Button>
               </Stack>
               </Item>
               <Item flex={1}> 
@@ -197,4 +173,5 @@ const Home = ({user, handleLogout }) => {
       </>
   )
 };
+
 export default Home;

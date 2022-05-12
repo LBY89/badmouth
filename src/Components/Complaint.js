@@ -11,8 +11,8 @@ import {
     Typography
   } from "@mui/material";
 import PropTypes from 'prop-types';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import LocalDiningIcon from '@mui/material';
+import ShoppingBasketIcon from '@mui/material';
 import complaintService from '../services/complaints'
 
 const StyledToolbar = styled(Toolbar)({
@@ -98,7 +98,7 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
     if(!complaint) {
         return null
     }
-
+    const imgLink = `http://localhost:3001/api/${complaint.complaintImage}`
     const filteredComments = comments.filter(comment => comment.complaintId === complaint.id)
 
     return(
@@ -130,38 +130,15 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
                 </StyledToolbar>
             }
         </AppBar>
-    
-         <Box
-            sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            flexDirection: 'row',
-            p: 1,
-            m: 1,
-            bgcolor: 'background.paper',
-            borderRadius: 1,
-            }}
-            >
-            <Item flex={4}>
-            <h2>{complaint ?  complaint.content : ''}</h2>
+        <h2>{complaint ?  complaint.content : ''}</h2>
+        <img src={imgLink} alt="complaint" height="400"/>
             {filteredComments.map(comment => 
                 <p key={comment.id}>{comment.content}</p>
             )}
-            <form onSubmit={addComment}>
-                <input value={newComment} onChange={handleCommentChange}/>
-                <button type="submit">save</button>
-            </form> 
-            </Item>
-            <Item flex={1}> 
-            <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="flex-start"
-                spacing={1}
-                >
-            </Stack>
-            </Item>
-        </Box>
+          <form onSubmit={addComment}>
+              <input value={newComment} onChange={handleCommentChange}/>
+              <button type="submit">save</button>
+          </form> 
         </>
     )
 }

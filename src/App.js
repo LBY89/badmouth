@@ -7,12 +7,10 @@ import Complaint from "./Components/Complaint";
 import { useState, useEffect } from "react";
 import complaintService from "./services/complaints";
 import { useNavigate } from "react-router-dom";
-import { AppBar, styled, Toolbar, Typography } from "@mui/material";
+import Create from './Pages/Create'
 
-const StyledToolbar = styled(Toolbar)({
-  display: "flex",
-  justifyContent: "space-between",
-});
+import Layout from './Components/Layout'
+
 
 const App = () => {
   const navigate = useNavigate();
@@ -72,17 +70,22 @@ const App = () => {
         <Route path="/signup" element={<SignUp user={user} setUser={setUser} errorMessage={errorMessage} setErrorMessage={setErrorMessage}/>} />
       </Routes> 
       : 
+      <Layout>
       <Routes>
+        <Route path='/create' element={<Create  setComplaints={setComplaints} complaints={complaints}/>} />
         <Route path="/" element={<Home user={user} 
         handleLogout={handleLogout} 
+        complaints={complaints}
+        setComplaints={setComplaints}
         />} />
         <Route path="/complaints/:id" element={<Complaint 
         handleLogout={handleLogout} 
-        user={user }
+        user={user}
         complaint={complaintLocated} 
         setComplaints={setComplaints}
         setComplaint={setComplaint}/>} />
       </Routes>
+      </Layout>
       }
       
     </div>
