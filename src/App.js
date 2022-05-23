@@ -14,7 +14,8 @@ import Layout from './Components/Layout'
 
 const App = () => {
   const navigate = useNavigate();
-
+  console.log('something');
+  
   const [complaints, setComplaints] = useState([]);
   const [complaint, setComplaint] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
