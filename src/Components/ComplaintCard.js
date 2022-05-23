@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 
 export default function ComplaintCard({ complaint }) {
   console.log('complaintn from CARD', complaint);
-  const imgLink = `http://localhost:3001/api/${complaint.complaintImage}`
+  const imgLink = `http://localhost:3001/api/${complaint.image}`
 
   return (
     <div>
