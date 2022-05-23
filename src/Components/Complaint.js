@@ -98,7 +98,7 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
     if(!complaint) {
         return null
     }
-    const imgLink = `http://localhost:3001/api/${complaint.complaintImage}`
+    const imgLink = `http://localhost:3001/api/${complaint.image}`
     const filteredComments = comments.filter(comment => comment.complaintId === complaint.id)
 
     return(

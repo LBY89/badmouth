@@ -13,15 +13,29 @@ const Create =({setComplaints, complaints})=> {
     const [category, setCategory] = useState('restaurant')
     const [complaintContent,setComplaintContent] = useState("")
     const [complaintTitle, setComplaintTitle] = useState("")
+    const [selectedFile, setSelectedFile] = useState(null)
 
+
+    const onFileChange = (event) => { 
+      event.preventDefault()
+      setSelectedFile(event.target.files[0]); 
+    }; 
     const submitComplaint =(e)=> {
         e.preventDefault()
-        const newComplaintObj = {
-          title: complaintTitle,
-          content: complaintContent
-        }
+        const formData = new FormData(); 
+        formData.append( 
+          "image", 
+          selectedFile
+        ); 
+        formData.append('title', complaintTitle)
+        formData.append('content', complaintContent)
+        // const newComplaintObj = {
+        //   title: complaintTitle,
+        //   content: complaintContent,
+        //   image: formData
+        // }
         complaintService
-        .create(newComplaintObj)
+        .create(formData)
         .then(returnedComplaint => {
           setComplaints(complaints.concat(returnedComplaint))
         })
@@ -60,6 +74,7 @@ const Create =({setComplaints, complaints})=> {
                 <FormControlLabel control={<Radio/>} label="Others" value="others"/>
                 </RadioGroup>
               </FormControl>
+              <input type={"file"} accept={".png, .jpg, .jpeg, .gif"} onChange={onFileChange}/>
               <Button onClick={submitComplaint}>Submit</Button>
               <Button >Reset</Button>
               </form>
