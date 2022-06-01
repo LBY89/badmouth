@@ -1,5 +1,3 @@
-
-
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
@@ -138,10 +136,6 @@ const Home = ({user, handleLogout, complaints, setComplaints }) => {
               {filteredComplaints.map(complaint => 
                   <Grid item key={complaint.id}>
                     <ComplaintCard complaint={complaint}/>
-                      {/* <Button component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
-                          localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
-                          {complaint.content}
-                      </Button> */}
                   </Grid>)}
               </Grid>
               <Item>

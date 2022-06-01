@@ -6,14 +6,16 @@ import {
     AppBar,
     Box,
     styled,
-    Stack,
     Toolbar,
     Typography
   } from "@mui/material";
 import PropTypes from 'prop-types';
-import LocalDiningIcon from '@mui/material';
-import ShoppingBasketIcon from '@mui/material';
-import complaintService from '../services/complaints'
+
+import { CardMedia } from '@mui/material'
+
+import CardContent from '@mui/material/CardContent'
+
+import TextField from '@mui/material/TextField';
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -24,6 +26,8 @@ const ButtonStyles = {
       backgroudColor: '#f9a825'
   }
 }
+
+
 function Item(props) {
     const { sx, ...other } = props;
     return (
@@ -130,15 +134,46 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
                 </StyledToolbar>
             }
         </AppBar>
-        <h2>{complaint ?  complaint.content : ''}</h2>
-        <img src={imgLink} alt="complaint" height="400"/>
+        
+        <Box sx={{minWidth: 300 }}>
+          <CardMedia
+            sx={{maxHeight: "60%", maxWidth: "80%", marginTop: 1, marginLeft: 2}}
+            component="img"
+            alt="screenshot"
+            image={imgLink}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h4" component="div">
+            {complaint.title}
+            </Typography>
+            <Typography variant="body2" color="text.primary">
+            {complaint.content}
+            </Typography>
+            <Typography sx={{marginTop:3}} variant="h6"> Comments</Typography>
+            <Typography>
             {filteredComments.map(comment => 
-                <p key={comment.id}>{comment.content}</p>
+              <Typography component={'span'} variant="body2" color="text.secondary" key={comment.id}>{comment.content}</Typography>
             )}
-          <form onSubmit={addComment}>
-              <input value={newComment} onChange={handleCommentChange}/>
-              <button type="submit">save</button>
-          </form> 
+            </Typography>
+          </CardContent>
+            <form onSubmit={addComment}>
+            <TextField
+                // sx={{width: "70%", marginLeft: 2 }}
+                className="form-text-input"
+                margin="normal"
+                required
+                id="email"
+                label="Add Comment"
+                multiline
+                value={newComment}
+                onChange={handleCommentChange}
+                autoFocus
+              />
+                <Button sx={{marginTop: 3, marginLeft: 2}} variant="outlined" type="submit">save</Button>
+            </form>
+          
+        </Box>
+         
         </>
     )
 }

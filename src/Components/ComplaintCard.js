@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
+import { CardActions, Button } from '@mui/material'
+
 import CardContent from '@mui/material/CardContent'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -18,38 +19,29 @@ export default function ComplaintCard({ complaint }) {
 
   return (
     <div>
-      <Card elevation={10}>
-        <CardHeader
-          action={
-            <IconButton 
-            sx={{
-                size: "sm",
-                bgcolor: 'green',
-                boxShadow: 0.2,
-                borderRadius: 2,
-                p: 1.5,
-                minWidth: 50,
-              }}
-             component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
-                localStorage.setItem('complaintStored', JSON.stringify(complaint))}>
-                    detail
-              {/* <DeleteOutlined /> */}
-            </IconButton>
-          }
-          title={complaint.title}
-        />
-         <CardMedia
-          component="img"
-          height="100"
-          image={imgLink}
-          alt="screenshot"
-        />
-        <CardContent>
-          <Typography color="textSecondary">
-         { complaint.content }
-          </Typography>
-        </CardContent>
-      </Card>
+      <Card sx={{ maxWidth: 345, minWidth: 300 }}>
+      <CardMedia
+        component="img"
+        alt="screenshot"
+        height="140"
+        image={imgLink}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+        {complaint.title}
+        </Typography>
+        <Typography noWrap variant="body2" color="text.secondary">
+        {complaint.content}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Share</Button>
+        <Button size="small"
+        component={Link} to={`/complaints/${complaint.id}`} onClick={() => 
+          localStorage.setItem('complaintStored', JSON.stringify(complaint))}
+        >Learn More</Button>
+      </CardActions>
+    </Card>
     </div>
   )
 }

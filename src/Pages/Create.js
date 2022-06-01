@@ -4,9 +4,9 @@ import {useState} from 'react'
 import complaintService from '../services/complaints'
 
 const StyledForm = {
-    marginTop: 20,
-    marginBottom: 20,
-    display: "block"
+    marginTop: 10,
+    marginBottom: 10,
+    
   }
 
 const Create =({setComplaints, complaints})=> {
@@ -22,6 +22,9 @@ const Create =({setComplaints, complaints})=> {
     }; 
     const submitComplaint =(e)=> {
         e.preventDefault()
+        if(!complaintTitle || !complaintContent || !selectedFile) {
+          return alert("Title, Content and Image upload required")
+        }
         const formData = new FormData(); 
         formData.append( 
           "image", 
@@ -44,26 +47,39 @@ const Create =({setComplaints, complaints})=> {
       }
     
       const handleComplaintContent = (e) => {
+       
         setComplaintContent(e.target.value)
       }
 
       const handleComplaintTitle = (e) => {
+       
         setComplaintTitle(e.target.value)
       }
 
     return(
-        <div>
+        <div style={{width: 500}}>
             <form style={StyledForm}>
-            <TextField
+              <div>
+              <TextField
+                className="form-text-input"
+                sx={{width: "100%", maxWidth: 500}}
                 onChange={handleComplaintTitle}
                 value={complaintTitle}
                 label={"title..."} //optional
               />
+              </div>
+              <div>
               <TextField
+                className="form-text-input"
+                sx={{width: "100%", maxWidth: 500}}
+                margin="normal"
+                multiline
                 onChange={handleComplaintContent}
                 value={complaintContent}
-                label={"complaint..."} //optional
+                label={"content..."} //optional
               />
+              </div>
+              <div>
               <FormControl style={StyledForm}>
                 <FormLabel>Good stuff in life</FormLabel>
                 <RadioGroup row 
@@ -74,9 +90,12 @@ const Create =({setComplaints, complaints})=> {
                 <FormControlLabel control={<Radio/>} label="Others" value="others"/>
                 </RadioGroup>
               </FormControl>
-              <input type={"file"} accept={".png, .jpg, .jpeg, .gif"} onChange={onFileChange}/>
-              <Button onClick={submitComplaint}>Submit</Button>
-              <Button >Reset</Button>
+              </div>
+              <div>
+              <div><input type={"file"} accept={".png, .jpg, .jpeg, .gif"} onChange={onFileChange}/></div>
+              <Button variant="outlined" sx={{marginRight: 2}} onClick={submitComplaint}>Submit a complaint</Button>
+              <Button variant="outlined" >Reset</Button>
+              </div>
               </form>
         </div>
     )

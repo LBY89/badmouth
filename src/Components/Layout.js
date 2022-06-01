@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { AddCircleOutlineOutlined, SubjectOutlined } from '@mui/icons-material'
 
-const drawerWidth = 240
+const drawerWidth = 220
 
 const useStyles = makeStyles((theme) => {
   return {
