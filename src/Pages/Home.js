@@ -1,19 +1,14 @@
-import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import Button from '@mui/material/Button';
-import { Box, TextField, Stack, Grid, Paper } from "@mui/material";
-import {
-    AppBar,
-    styled,
-    Toolbar,
-    InputBase
-  } from "@mui/material";
-import PropTypes from 'prop-types';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import complaintService from '../services/complaints'
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import Button from "@mui/material/Button";
+import { Box,  Stack, Grid } from "@mui/material";
+import { AppBar, styled, Toolbar, InputBase } from "@mui/material";
+
+import LocalDiningIcon from "@mui/icons-material/LocalDining";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+
 //import {  Radio, RadioGroup, FormControlLabel, FormLabel, FormControl } from '@mui/material'
-import ComplaintCard from '../Components/ComplaintCard'
+import ComplaintCard from "../Components/ComplaintCard";
 
 const Search = styled("div")(({ theme }) => ({
   backgroundColor: "white",
@@ -22,21 +17,16 @@ const Search = styled("div")(({ theme }) => ({
   width: "40%",
 }));
 
-
 const ButtonStyles = {
   bgColor: {
     backgroudColor: "#f9a825",
   },
 };
 
-
-
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
-
-
 
 function Item(props) {
   const { sx, ...other } = props;
@@ -62,110 +52,104 @@ function Item(props) {
   );
 }
 
-const Home = ({user, handleLogout, complaints, setComplaints }) => {
-  // to solve newly added complaint not clickable, receive setComplaints from 
-  // App parent 
-  
+const Home = ({ user, handleLogout, complaints }) => {
   const [filter, setFilter] = useState("");
-  
 
   const handleSearchBarInput = (e) => {
     setFilter(e.target.value);
   };
-    
-  const matchFilter = complaints.filter((complaint) => complaint.content.toLowerCase().includes(filter.toLowerCase()) || 
-  complaint.title.toLowerCase().includes(filter.toLowerCase()))
-  
-  const filteredComplaints = !filter
-  ? complaints
-  : matchFilter
-  
-  return(
-      <>
-          <AppBar position="sticky">
-          { user === null ?
-              <StyledToolbar>
-              <Search onChange={handleSearchBarInput}>
-                <InputBase placeholder="search..."/>
-              </Search>
-              <Button
+
+  const matchFilter = complaints.filter(
+    (complaint) =>
+      complaint.content.toLowerCase().includes(filter.toLowerCase()) ||
+      complaint.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  const filteredComplaints = !filter ? complaints : matchFilter;
+
+  return (
+    <>
+      <AppBar position="sticky">
+        {user === null ? (
+          <StyledToolbar>
+            <Search onChange={handleSearchBarInput}>
+              <InputBase placeholder="search..." />
+            </Search>
+            <Button
               style={ButtonStyles.bgColor}
               variant="fab"
-              component={Link} to={'/signin'}
-              >
-              sign in</Button>
-              <Button
+              component={Link}
+              to={"/signin"}
+            >
+              sign in
+            </Button>
+            <Button
               style={ButtonStyles.bgColor}
               variant="fab"
-              component={Link} to={'/signup'}
-              >sign up</Button>
-              </StyledToolbar>
+              component={Link}
+              to={"/signup"}
+            >
+              sign up
+            </Button>
+          </StyledToolbar>
+        ) : (
+          <StyledToolbar>
+            <Search onChange={handleSearchBarInput}>
+              <InputBase placeholder="search..." />
+            </Search>
+            {user.firstname} logged in{" "}
+            <Button
+              onClick={handleLogout}
+              style={ButtonStyles.bgcolor}
+              variant="fab"
+              component={Link}
+              to={"/home"}
+            >
+              log out
+            </Button>
+          </StyledToolbar>
+        )}
+      </AppBar>
 
-              :
-
-               <StyledToolbar>
-                <Search onChange={handleSearchBarInput}>
-                  <InputBase placeholder="search..." />
-                </Search>
-                {user.firstname} logged in{" "}
-                <Button
-                  onClick={handleLogout}
-                  style={ButtonStyles.bgcolor}
-                  variant="fab"
-                  component={Link}
-                  to={"/home"}
-                >
-                  log out
-                </Button>
-              </StyledToolbar>
-          }
-          </AppBar>
-          
-          <Box
-              sx={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              p: 1,
-              m: 1,
-              bgcolor: 'background.paper',
-              borderRadius: 1,
-              }}
-              >
-              <Grid container spacing={3}>
-              {filteredComplaints.map(complaint => 
-                  <Grid item key={complaint.id}>
-                    <ComplaintCard complaint={complaint}/>
-                  </Grid>)}
-              </Grid>
-              <Item>
-              <Stack>
-              </Stack>
-              </Item>
-              <Item flex={1}> 
-              <Stack
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="flex-start"
-                  spacing={1}
-                  >
-              <Button 
-                  startIcon={<LocalDiningIcon/>} 
-                  color="secondary"
-                  >
-                  restaurant
-              </Button>
-              <Button 
-                  startIcon={<ShoppingBasketIcon/>}
-                  color='otherColor'
-                  >
-                  shops
-              </Button>
-              </Stack>
-              </Item>
-          </Box>
-      </>
-  )
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          flexDirection: "row",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
+      >
+        <Grid container spacing={3}>
+          {filteredComplaints.map((complaint) => (
+            <Grid item key={complaint.id}>
+              <ComplaintCard complaint={complaint} />
+            </Grid>
+          ))}
+        </Grid>
+        <Item>
+          <Stack></Stack>
+        </Item>
+        <Item flex={1}>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={1}
+          >
+            <Button startIcon={<LocalDiningIcon />} color="secondary">
+              restaurant
+            </Button>
+            <Button startIcon={<ShoppingBasketIcon />} color="otherColor">
+              shops
+            </Button>
+          </Stack>
+        </Item>
+      </Box>
+    </>
+  );
 };
 
 export default Home;

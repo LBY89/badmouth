@@ -1,8 +1,8 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/complaints'
+const baseUrl = '/api/complaints'
 
 ///api/complaints/:id/comments
-const getAll = (id) => {
+const getComplaintComments = (id) => {
   console.log('id', id);
   
   const request = axios.get(`${baseUrl}/${id}/comments`)
@@ -20,4 +20,4 @@ const create = async (id, newObject) => {
   return response.data
   
 }
-export default { getAll, create }
+export default { getComplaintComments, create }

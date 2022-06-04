@@ -33,7 +33,7 @@ const theme = createTheme();
 const SignUp = (props) => {
 
     const navigate = useNavigate()
-    const { errorMessage, setErrorMessage} = props
+    const {setErrorMessage} = props
 
   const handleSubmit = async (event) => {
     event.preventDefault();

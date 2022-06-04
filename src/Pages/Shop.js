@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import Button from '@mui/material/Button';
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 const Shop =()=> {
     return(

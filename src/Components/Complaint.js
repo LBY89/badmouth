@@ -1,6 +1,7 @@
+// import complaintService from '../services/complaints'
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import commentService from '../services/comments'
 import {
     AppBar,
@@ -59,52 +60,103 @@ function Item(props) {
       PropTypes.object,
     ]),
   };
-const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints}) => {
+
+const EditComplaint=({display, setDisplay, id, updateComplaint, complaint})=> {
+  const [title, setTitle] = useState(complaint.title)
+  const [content, setContent] = useState(complaint.content)
+  if(!display){
+    return null
+  }
+  
+  const handleContent = (e) => {
+    setContent(e.target.value)
+  }
+
+  const handleTitle = (e) => {
+    setTitle(e.target.value)
+  }
+
+  const editForm = (e) => {
+    e.preventDefault()
+    updateComplaint({id, title, content})
+    setDisplay(false)
+  }
+
+  return(
+    <div>
+      <form onSubmit={editForm}>
+      <TextField
+          className="form-text-input"
+          sx={{width: "100%", maxWidth: 500}}
+          margin="normal"
+          onChange={handleTitle}
+          value={title}
+          label={"title..."} //optional
+        />
+        <TextField
+          className="form-text-input"
+          sx={{width: "100%", maxWidth: 500}}
+          margin="normal"
+          multiline
+          onChange={handleContent}
+          value={content}
+          label={"content..."} //optional
+        />
+        <Button type="submit" >save</Button>
+        </form>
+    </div>
+  )
+}
+const Complaint = ({user, updateComplaint, complaint, handleLogout, deleteSingleComplaint}) => {
     const [newComment, setNewComment] = useState('')
     const [comments, setComments] = useState([])
-    console.log('comments from complaint', comments);
-    
-    useEffect(() => {
-        console.log('effect')
-        const complaintJSON = localStorage.getItem('complaintStored')
-        if (complaintJSON) {
-            const complaint = JSON.parse(complaintJSON)
-            setComplaint(complaint)
+    const [editForm, setEditForm] = useState(false)
+  
+    // useEffect(() => {
+    //     console.log('effect')
+    //     const complaintJSON = localStorage.getItem('complaintStored')
+    //     if (complaintJSON) {
+    //         const complaint = JSON.parse(complaintJSON)
+    //         setComplaint(complaint)
             
-            commentService
-            .getAll(complaint.id)
-            .then(allComments => {
-              setComments(allComments)
+    //         commentService
+    //         .getComplaintComments(complaint.id)
+    //         .then(allComments => {
+    //           setComments(allComments)
                 
-            })
-        }
-      }, [])
+    //         })
+    //     }
+    //   }, [])
 
-      const addComment =(e) => {
-        e.preventDefault()
-        const newCommentObj = {
-            content: newComment,
-            complaintId: complaint.id 
-        }
-        commentService
-        .create(complaint.id, newCommentObj)
-        .then(returnedComment =>{
-          setComments(comments.concat(returnedComment))
-          
-        })
-        setNewComment('')
+    const addComment =(e) => {
+      e.preventDefault()
+      const newCommentObj = {
+          content: newComment,
+          complaintId: complaint.id 
+      }
+      commentService
+      .create(complaint.id, newCommentObj)
+      .then(returnedComment =>{
+        setComments(comments.concat(returnedComment))
         
-      }
-      const handleCommentChange =(e)=> {
-        setNewComment(e.target.value)
-      }
+      })
+      setNewComment('')
+      
+    }
+    const handleCommentChange =(e)=> {
+      setNewComment(e.target.value)
+    }
+
+    // const handleUpdateComplaint = () {
+
+    // }
 
     if(!complaint) {
         return null
     }
     const imgLink = `http://localhost:3001/api/${complaint.image}`
-    const filteredComments = comments.filter(comment => comment.complaintId === complaint.id)
-
+    // const filteredComments = complaint.comments.filter(comment => comment.complaintId === complaint.id)
+    // console.log('user', user);
     return(
         <>
         <AppBar position="sticky">
@@ -123,9 +175,7 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
                 component={Link} to={'/signup'}
                 >sign up</Button>
                 </StyledToolbar>
-
                 :
-
                 <StyledToolbar>
                 search box 
                 sign in and up
@@ -149,11 +199,19 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
             <Typography variant="body2" color="text.primary">
             {complaint.content}
             </Typography>
+            {user.id === complaint.user.id ? 
+
+
+            <><Button onClick={() =>setEditForm(true)}>Edit</Button>
+
+
+            <Button onClick={() => deleteSingleComplaint(complaint.id)}>Delete</Button></>
+            : null}
             <Typography sx={{marginTop:3}} variant="h6"> Comments</Typography>
             <Typography>
-            {filteredComments.map(comment => 
+            {complaint.comments.map(comment => 
               <Typography component={'span'} variant="body2" color="text.secondary" key={comment.id}>{comment.content}</Typography>
-            )}
+              )}
             </Typography>
           </CardContent>
             <form onSubmit={addComment}>
@@ -171,9 +229,8 @@ const Complaint = ({user, complaint, setComplaint, handleLogout, setComplaints})
               />
                 <Button sx={{marginTop: 3, marginLeft: 2}} variant="outlined" type="submit">save</Button>
             </form>
-          
         </Box>
-         
+        <EditComplaint display={editForm} setDisplay={setEditForm} id={complaint.id} updateComplaint={updateComplaint} complaint={complaint}/> 
         </>
     )
 }
