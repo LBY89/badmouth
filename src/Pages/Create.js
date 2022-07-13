@@ -10,6 +10,8 @@ import {
 import { useState } from 'react'
 import complaintService from '../services/complaints'
 
+import { Convert } from 'mongo-image-converter' // helper function to convert image to string?
+
 const StyledForm = {
   marginTop: 10,
   marginBottom: 10,
@@ -25,23 +27,35 @@ const Create = ({ setComplaints, complaints }) => {
     event.preventDefault()
     setSelectedFile(event.target.files[0])
   }
-  const submitComplaint = (e) => {
+  const submitComplaint = async (e) => {
     e.preventDefault()
     if (!complaintTitle || !complaintContent || !selectedFile) {
       return alert('Title, Content and Image upload required')
     }
-    const formData = new FormData()
-    formData.append('image', selectedFile)
-    formData.append('title', complaintTitle)
-    formData.append('content', complaintContent)
-    // const newComplaintObj = {
-    //   title: complaintTitle,
-    //   content: complaintContent,
-    //   image: formData
-    // }
-    complaintService.create(formData).then((returnedComplaint) => {
-      setComplaints(complaints.concat(returnedComplaint))
-    })
+
+    try {
+      const convertedImage = await Convert(selectedFile)
+      //console.log('covertedImage', convertedImage)
+
+      if (convertedImage) {
+        const formData = {
+          title: complaintTitle,
+          content: complaintContent,
+          image: convertedImage,
+        }
+
+        console.log('formdata', formData)
+
+        complaintService.create(formData).then((returnedComplaint) => {
+          setComplaints(complaints.concat(returnedComplaint))
+        })
+      } else {
+        console.log('The file is not in format of image/jpeg or image/png')
+      }
+    } catch (error) {
+      console.warn(error.message)
+    }
+
     console.log('NEW COMPLAINTS', complaints)
     setComplaintContent('')
     setComplaintTitle('')
@@ -127,5 +141,4 @@ const Create = ({ setComplaints, complaints }) => {
     </div>
   )
 }
-
 export default Create

@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react'
 import complaintService from './services/complaints'
 import { useNavigate } from 'react-router-dom'
 import Create from './Pages/Create'
+import commentService from './services/comments'
+
 
 import Layout from './Components/Layout'
 
@@ -15,7 +17,6 @@ const App = () => {
   const navigate = useNavigate()
 
   const [complaints, setComplaints] = useState([])
-  const [, setComplaint] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
 
@@ -47,13 +48,21 @@ const App = () => {
 
   const updateComplaint = async ({ id, ...complaintObj }) => {
     const updatedComplaint = await complaintService.update(id, complaintObj)
-    console.log('UPDATED', updatedComplaint)
     setComplaints(
       complaints.map((complaint) =>
         complaint.id !== updatedComplaint.id ? complaint : updatedComplaint
       )
     )
   }
+
+  const updateComment = async (commentObj) => {
+    const newComment = await commentService.create(commentObj)
+      setComplaints(
+        complaints.map((complaint) =>
+          complaint.id !== commentObj.id ? complaint : {...complaint, comments: complaint.comments.concat(newComment) }
+        )
+      ) 
+    }
 
   const handleLogout = (event) => {
     event.preventDefault()
@@ -93,7 +102,7 @@ const App = () => {
             element={
               <Complaint
                 user={user}
-                complaint={complaintLocated} /*setComplaint={setComplaint}*/
+                complaint={complaintLocated}
               />
             }
           />
@@ -153,8 +162,7 @@ const App = () => {
                   updateComplaint={updateComplaint}
                   user={user}
                   complaint={complaintLocated}
-                  setComplaints={setComplaints}
-                  setComplaint={setComplaint}
+                  updateComment={updateComment}
                   deleteSingleComplaint={deleteSingleComplaint}
                 />
               }

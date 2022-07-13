@@ -1,43 +1,42 @@
 import axios from 'axios'
-const baseUrl = '/api/complaints'
+const baseUrl = ' http://localhost:3001/api/complaints'
 
 let token = null
 
-const setToken = newToken => {
+const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
 const getAll = () => {
-
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then((response) => response.data)
 }
 
-const deleteOne = async id=> {
+const deleteOne = async (id) => {
   console.log('from deleteOne')
-  
+
   const config = {
     headers: { Authorization: token },
-    }
+  }
   const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response.data
 }
 
 const update = (id, newObject) => {
-  console.log(newObject);
+  console.log(newObject)
   const request = axios.put(`${baseUrl}/${id}`, newObject)
 
-  return request.then(response => response.data)
+  return request.then((response) => response.data)
 }
 
-const create = async newObject => {
-    const config = {
-        headers: { Authorization: token },
-        }
-  console.log('newObject from response', newObject);
+const create = async (newObject) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  console.log('newObject from response', newObject)
   const response = await axios.post(baseUrl, newObject, config)
   //console.log('newObject from response', newObject);
-  
+
   return response.data
 }
 
