@@ -1,4 +1,7 @@
 // import complaintService from '../services/complaints'
+import React from 'react'
+import EditComplaint from './EditComplaint'
+
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import { useState } from 'react'
@@ -55,58 +58,6 @@ Item.propTypes = {
   ]),
 }
 
-const EditComplaint = ({
-  display,
-  setDisplay,
-  id,
-  updateComplaint,
-  complaint,
-}) => {
-  const [title, setTitle] = useState(complaint.title)
-  const [content, setContent] = useState(complaint.content)
-  if (!display) {
-    return null
-  }
-
-  const handleContent = (e) => {
-    setContent(e.target.value)
-  }
-
-  const handleTitle = (e) => {
-    setTitle(e.target.value)
-  }
-
-  const editForm = (e) => {
-    e.preventDefault()
-    updateComplaint({ id, title, content })
-    setDisplay(false)
-  }
-
-  return (
-    <div>
-      <form onSubmit={editForm}>
-        <TextField
-          className="form-text-input"
-          sx={{ width: '100%', maxWidth: 500 }}
-          margin="normal"
-          onChange={handleTitle}
-          value={title}
-          label={'title...'} //optional
-        />
-        <TextField
-          className="form-text-input"
-          sx={{ width: '100%', maxWidth: 500 }}
-          margin="normal"
-          multiline
-          onChange={handleContent}
-          value={content}
-          label={'content...'} //optional
-        />
-        <Button type="submit">save</Button>
-      </form>
-    </div>
-  )
-}
 const Complaint = ({
   user,
   updateComplaint,
@@ -117,7 +68,7 @@ const Complaint = ({
 }) => {
   const [newComment, setNewComment] = useState('')
   const [editForm, setEditForm] = useState(false)
-  
+
   const addComment = (e) => {
     e.preventDefault()
     const newCommentObj = {
@@ -133,16 +84,11 @@ const Complaint = ({
     setNewComment(e.target.value)
   }
 
-  // const handleUpdateComplaint = () {
-
-  // }
-
   if (!complaint) {
     return null
   }
   const imgLink = `${complaint.image}`
-  // const filteredComments = complaint.comments.filter(comment => comment.complaintId === complaint.id)
-  // console.log('user', user);
+
   return (
     <>
       <AppBar position="sticky">
@@ -194,7 +140,7 @@ const Complaint = ({
           <Typography variant="body2" color="text.primary">
             {complaint.content}
           </Typography>
-          {user.id === complaint.user.id ? (
+          {user && user.id === complaint.user.id ? (
             <>
               <Button onClick={() => setEditForm(true)}>Edit</Button>
 
@@ -222,7 +168,6 @@ const Complaint = ({
         </CardContent>
         <form onSubmit={addComment}>
           <TextField
-            // sx={{width: "70%", marginLeft: 2 }}
             className="form-text-input"
             margin="normal"
             required

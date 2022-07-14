@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = ' http://localhost:3001/api/complaints'
+const baseUrl = '/api/complaints'
 
 ///api/complaints/:id/comments
 const getComplaintComments = (id) => {

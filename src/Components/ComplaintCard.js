@@ -9,12 +9,7 @@ import CardMedia from '@mui/material/CardMedia'
 import { Link } from 'react-router-dom'
 
 export default function ComplaintCard({ complaint }) {
-  console.log('complaintn from CARD', complaint)
   const imgLink = `${complaint.image}`
-  console.log('====================================')
-  console.log('imgLink', imgLink)
-  console.log('====================================')
-
   return (
     <div>
       <Card sx={{ maxWidth: 345, minWidth: 300 }}>
