@@ -2,6 +2,12 @@
 
 [BadMouth App](https://stark-temple-85046.herokuapp.com/)
 
+## Mind You
+
+**You have to register and login to experience features like leave a comment to a complaint post.**
+
+**There are a few notiable bugs needed to be fixed, such as that search bar is not working well between login user and regular viewer**
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
