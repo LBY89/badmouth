@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  justify-content: space-around;
+  margin-left: 50px;
+}
+.image {
+  width: 400px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 25px;
+  margin-left: 20px;
+  margin-right: 40px;
+
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+
+.image:hover {
+  width: 450px;
+}
+
+.text-buttons {
+  margin-top: 150px;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 40px;
+}
+
+.text {
+  margin-bottom: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  color: crimson;
+}
+
+.description::before {
+  content: '\a';
+  white-space: pre;
+}
+.signin-up-buttons {
+  flex-direction: row;
+  margin-bottom: 30px;
+}
+.signup-button {
+  text-decoration: none;
+  background-color: white;
+  border-color: rgb(102, 175, 239);
+  border-style: none;
+  border-radius: 10px;
+  color: rgb(51, 23, 162);
+  font-size: 25px;
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 80px;
+  transition: background-color 0.5s, color 0.5s;
+}
+.signup-button:hover {
+  background-color: rgb(102, 175, 239);
+  color: white;
+}
+
+.signin-button {
+  text-decoration: none;
+  background-color: white;
+  border-color: rgb(102, 175, 239);
+  border-style: none;
+  border-radius: 10px;
+  color: rgb(51, 23, 162);
+  font-size: 25px;
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s, color 0.5s;
+}
+.signin-button:hover {
+  background-color: rgb(102, 175, 239);
+  color: white;
+}
+.nonlogin-button {
+  text-decoration: none;
+  background-color: white;
+  border-color: rgb(102, 175, 239);
+  border-style: none;
+  border-radius: 10px;
+  color: rgb(51, 23, 162);
+  font-size: 25px;
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 40px;
+  transition: background-color 0.5s, color 0.5s;
+}
+.nonlogin-button:hover {
+  background-color: rgb(102, 175, 239);
+  color: white;
+}
+
+.credit {
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(132, 149, 165);
+}
+
+.pablo,
+.baoying {
+  text-decoration: none;
+  color: rgb(132, 149, 165);
+  font-weight: bold;
+}
